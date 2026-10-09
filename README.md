@@ -1,10 +1,14 @@
-# Closed-loop wavefront correction for an optical tweezer setup
+# Sensorless adaptive optics for an optical tweezer setup
 
-Python code I wrote for my master's thesis to correct the aberrations a laser beam picks up along its optical path. A camera image of the focal spot is scored by an objective function, and Zernike coefficients on a spatial light modulator (SLM) are adjusted step by step until the spot is tighter and centered on its target.
+Wavefront correction with coordinate descent. Python code I wrote for my master's thesis to correct the aberrations a laser beam picks up along its optical path.
+
+Instead of measuring the wavefront with a dedicated wavefront sensor, the code scores a camera image of the focal spot with a metric. It then adjusts Zernike coefficients on a spatial light modulator (SLM) using coordinate descent, until the spot is tighter and centered on its target.
 
 ## Why this problem
 
-Optical tweezers need a tightly focused, well-centered spot. Imperfect optics along the beam path distort the wavefront, which broadens the focus and lowers its peak intensity. Zernike polynomials are a standard basis for describing these distortions, so correction reduces to finding a small set of coefficients for the SLM to apply. No analytic model of the setup is needed. The camera acts as the sensor, and the optimizer works directly on measured images.
+Optical tweezers need a tightly focused, well-centered spot. Imperfect optics along the beam path distort the wavefront, which broadens the focus and lowers its peak intensity. Zernike polynomials are a standard basis for describing these distortions, so correction reduces to finding a small set of coefficients for the SLM to apply.
+
+A sensorless approach needs no wavefront sensor and no analytic model of the setup. The camera image of the focal spot is the only feedback, and the optimizer works directly on a metric computed from measured images.
 
 ## How it works
 
@@ -22,7 +26,7 @@ flowchart LR
     H --> A
 ```
 
-The optimizer is a derivative-free coordinate search. For each Zernike mode it tries a positive and a negative step and keeps whichever lowers the loss. When no mode improves, the step size is divided by a decay rate (default 1.8) and the next stage begins. The defaults are 5 stages with up to 100 steps per stage.
+The optimizer is coordinate descent over the Zernike coefficients. It improves one coefficient at a time, tries a positive and a negative step for each mode, and keeps whichever lowers the loss. It uses only metric evaluations, never gradients. When no mode improves, the step size is divided by a decay rate (default 1.8) and the next stage begins. The defaults are 5 stages with up to 100 steps per stage.
 
 There are two optimization routines:
 
@@ -44,13 +48,13 @@ This is experiment code, not a general-purpose package. Running the optimizers n
 - a focusing lens and a camera imaging the focal spot
 - the control library behind the `commander` object, which exposes camera frames and Zernike coefficients
 
-Without that setup the optimizers cannot run. The repository does not include recorded before and after images, so it makes no performance claim. It is best read as a worked example of image-feedback optimization on a real optical system.
+Without that setup the optimizers cannot run. The repository does not include recorded before and after images, so it makes no performance claim. It is best read as a worked example of sensorless adaptive optics on a real optical system.
 
 ## What I built
 
 Most of this code is my own work, written as a first attempt at the problem during my thesis:
 
-- The staged coordinate-search optimizer for focus and position
+- The staged coordinate descent optimizer for focus and position
 - The objective functions, covering both image-quality and image-comparison measures
 - Airy and Gaussian reference-image generation
 - Image analysis helpers for spot center and radius
