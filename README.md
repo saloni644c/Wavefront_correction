@@ -7,12 +7,9 @@ imaging quality.
 
 ## Result
 
-**Line-pair resolution: 550 → 600 lp/mm (+9.1%)** after wavefront
-optimization, as reported in my thesis, Chapter 4, Section 4.4.1.
+**Line-pair resolution: 550 → 600 lp/mm after wavefront
+optimization
 
-*The result is reported from the experimental work described in the
-thesis; a reproducible, hardware-independent benchmark is not yet
-included in this repository.*
 
 ```{=html}
 <!-- Add one verified, cropped result figure here, for example:
