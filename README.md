@@ -58,8 +58,4 @@ controller libraries. A small offline demo using saved images, without
 physical camera or SLM hardware, is planned; portable run instructions
 will be added with it.
 
-## Status and next steps
 
--   Separate reusable image analysis from hardware-specific control.
--   Add an offline example, dependency setup, and basic tests.
--   Add a checked result figure and reproducible example outputs.
