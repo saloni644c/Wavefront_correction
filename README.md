@@ -86,8 +86,5 @@ Python 3 with numpy, scipy, matplotlib and scikit-image.
 ## Author
 
 Saloni Chourasiya, physicist working on machine learning and scientific computing.
-[TODO: email, LinkedIn]
 
-## License
 
-MIT
